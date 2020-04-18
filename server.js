@@ -85,18 +85,17 @@ io.on('connection', function(socket){
     })
 
     socket.on("board-clicked", function(data){
+        var c = ""
         if(game.turn == socket.username && game.won!= true){
             var column = data.col.substring(4,data.col.length) - 1
             console.log("Column: "+column)
             for (var row = game.board.length - 1; row >= 0; row--) {
                 if(game.board[row][column] == 0){
                     game.board[row][column] = game.value
-                    console.log("Row "+row)
+
                     break;
                 }
             }
-            //var id =
-            var c = ""
             if(socket.username == game.player1){
                 c = "<div id='1-1' class='chip order-1 chip-red'></div>"
                 io.to(game.room).emit("add-chip-to-column", data.col, c)
