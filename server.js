@@ -97,8 +97,8 @@ io.on('connection', function(socket){
                     break;
                 }
             }
-            row += 1;
-            column += 1;
+            var row1 = row+1;
+            var column1 = column+1;
             c = row+"-"+column
             console.log(c)
             if(valid){
