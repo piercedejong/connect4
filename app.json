@@ -1,0 +1,17 @@
+{
+  "name": "Chat App",
+  "description": "Chat App for SENG 513 Winter 2020",
+  "website": "https://seng513chat.herokuapp.com/",
+  "repository": "https://github.com/piercedejong/chat",
+  "logo": "https://node-js-sample.herokuapp.com/node.svg",
+  "success_url": "/",
+  "keywords": [
+  ],
+  "scripts": {
+  },
+  "addons": [
+  ],
+  "env": {
+    "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-nodejs"
+  }
+}
