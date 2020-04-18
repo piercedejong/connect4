@@ -33,6 +33,10 @@ $(function () {
         alert(name+" has won the game!")
     })
 
+    socket.on("invalid-chip", function(name){
+        alert("Error: Can not place chip there")
+    })
+
     $(".col-game").mouseover(function(e) {
         var div = $(e.target)
         var id = ""

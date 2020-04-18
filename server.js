@@ -87,35 +87,45 @@ io.on('connection', function(socket){
     socket.on("board-clicked", function(data){
         var c = ""
         if(game.turn == socket.username && game.won!= true){
+            var valid = false
             var column = data.col.substring(4,data.col.length) - 1
-            console.log("Column: "+column)
-            for (var row = game.board.length - 1; row >= 0; row--) {
+            var row;
+            for (row = game.board.length - 1; row >= 0; row--) {
                 if(game.board[row][column] == 0){
                     game.board[row][column] = game.value
-
+                    valid = true
                     break;
                 }
             }
-            if(socket.username == game.player1){
-                c = "<div id='1-1' class='chip order-1 chip-red'></div>"
-                io.to(game.room).emit("add-chip-to-column", data.col, c)
-                if(check_for_winner(game.board, game.value)){
-                    game.won = true
-                    io.to(game.room).emit("game-won", game.turn)
+            row += 1;
+            column += 1;
+            c = row+"-"+column
+            console.log(c)
+            if(valid){
+                if(socket.username == game.player1){
+                    c = "<div id='"+c+"' class='chip order-1 chip-red'></div>"
+                    io.to(game.room).emit("add-chip-to-column", data.col, c)
+                    if(check_for_winner(game.board, game.value)){
+                        game.won = true
+                        io.to(game.room).emit("game-won", game.turn)
+                    }
+                    game.turn = game.player2
+                    game.value = 2
+                }else{
+                    c = "<div id='"+c+"' class='chip order-1 chip-yellow'></div>"
+                    io.to(game.room).emit("add-chip-to-column", data.col, c)
+                    if(check_for_winner(game.board, game.value)){
+                        game.won = true
+                        io.to(game.room).emit("game-won")
+                    }
+                    game.turn = game.player1
+                    game.value = 1
                 }
-                game.turn = game.player2
-                game.value = 2
+                io.to(game.room).emit("update-current-player", game.turn)
             }else{
-                c = "<div id='1-1' class='chip order-1 chip-yellow'></div>"
-                io.to(game.room).emit("add-chip-to-column", data.col, c)
-                if(check_for_winner(game.board, game.value)){
-                    game.won = true
-                    io.to(game.room).emit("game-won")
-                }
-                game.turn = game.player1
-                game.value = 1
+                socket.emit("invlid-chip")
             }
-            io.to(game.room).emit("update-current-player", game.turn)
+
         }
     })
 
