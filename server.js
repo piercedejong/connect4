@@ -88,17 +88,15 @@ io.on('connection', function(socket){
         var c = ""
         if(game.turn == socket.username && game.won!= true){
             var valid = false
-            var column = data.col.substring(4,data.col.length) - 1
+            var column = data.col.substring(4,data.col.length)
             var row;
-            for (row = game.board.length - 1; row >= 0; row--) {
+            for (row = game.board.length - 1; row >= 0; row--){
                 if(game.board[row][column] == 0){
                     game.board[row][column] = game.value
                     valid = true
                     break;
                 }
             }
-            var row1 = row+1;
-            var column1 = column+1;
             c = row+"-"+column
             console.log(c)
             if(valid){
@@ -116,7 +114,7 @@ io.on('connection', function(socket){
                     io.to(game.room).emit("add-chip-to-column", data.col, c)
                     if(check_for_winner(game.board, game.value)){
                         game.won = true
-                        io.to(game.room).emit("game-won")
+                        io.to(game.room).emit("game-won", game.turn)
                     }
                     game.turn = game.player1
                     game.value = 1
@@ -166,19 +164,19 @@ io.on('connection', function(socket){
             }
         }
 
+        for(var y=0;y<board.length;y++){ //ROW
+            for(var x=0;x<board[y].length;x++){ //COLUMN
+                if(check_diagonal(board,y,x)){
+                    return true;
+                }
+            }
+        }
+
         var flipBoard = flip_board(board)
         for(var x=0;x<flipBoard.length;x++){
             var win = check_row(flipBoard[x], value)
             if (win == true){
                 return true
-            }
-        }
-
-        for(var x=0;x<board.length;x++){
-            for(var y =0;y<board[x].length;y++){
-                if(check_diagonal(board,x,y)){
-                    return true;
-                }
             }
         }
         return false
@@ -194,23 +192,26 @@ io.on('connection', function(socket){
 
     function check_diagonal(board, row, column) {
     var result = false;
+    print_board(board)
+    console.log(row+" "+column)
+    console.log(board[row]+"\n")
 
     if(board[row][column] != 0) {
         // there are four possible directions of a win
         // if the top right contains a possible win
-        if(row - 3 > -1 && column + 3 < 6) {
+        if(row - 3 > -1 && column + 3 < board.length) {
             result = board[row][column] == board[row - 1][column + 1] &&
                      board[row][column] == board[row - 2][column + 2] &&
                      board[row][column] == board[row - 3][column + 3];
         }
         // if the bottom right contains possible win
-        if(row + 3 < 7  && column + 3 < 6) {
+        if(typeof board[row+3] !== 'undefined' && column + 3 < board.length) {
             result = board[row][column] == board[row + 1][column + 1] &&
                      board[row][column] == board[row + 2][column + 2] &&
                      board[row][column] == board[row + 3][column + 3];
         }
         // if the bottom left contains possible win
-        if(row + 3 < 7 && column - 3 > -1) {
+        if(typeof board[row+3] !== 'undefined' && column - 3 > -1) {
             result = board[row][column] == board[row + 1][column - 1] &&
                      board[row][column] == board[row + 2][column - 2] &&
                      board[row][column] == board[row + 3][column - 3];
