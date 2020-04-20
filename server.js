@@ -26,7 +26,6 @@ io.on('connection', function(socket){
     })
 
     socket.on("create-user", function(username){
-        console.log("Create User")
         socket.username = username
 
         var table = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -113,7 +112,6 @@ io.on('connection', function(socket){
     }
 
     function create_game(code){
-        console.log("Join Room Player 2")
         join_room(code)
         //remove_player_from_all_games(socket.username)
 
@@ -131,12 +129,16 @@ io.on('connection', function(socket){
         g.player2 = socket.username
         g.room = socket.room
         g.turn = (Math.floor(Math.random()*2)==0) ? g.player1 : g.player2;
+        g.turn = g.player1
         g.color = "chip-red"
         g.value = 1
         g.won = false
         g.board = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
 
-        console.log(g)
+        if(waiting.username === g.player1 || waiting.username === g.player2){
+            waiting.username = ""
+            waiting.code = ""
+        }
 
         games.push(g)
 
@@ -153,9 +155,6 @@ io.on('connection', function(socket){
                 games.splice(index,1)
             }
         })
-        console.log("REMOVE PLAYER "+username)
-        console.log(games)
-        console.log("REMOVE DONE")
     }
 
     socket.on('create-game-room', function(){
@@ -188,13 +187,8 @@ io.on('connection', function(socket){
     })
 
     socket.on("board-clicked", function(data){
-        console.log("Board-Clicked")
         var c = "";
         var g = games[games.findIndex(x => x.code == socket.code)]
-        console.log(socket.code)
-        console.log(g)
-
-        console.log('\n')
         if(typeof g !== "undefined" && g.turn === socket.username && g.won!= true){
             var valid = false
             var column = data.col.substring(4,data.col.length)
