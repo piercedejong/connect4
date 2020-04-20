@@ -50,7 +50,7 @@ $(function () {
 
     $("#random-match").click(function(){
         socket.emit("join-random-match")
-        $("#waiting").html("*Waiting for antother Player*")
+        $("#waiting").html("*Waiting for another Player*")
     })
 
     socket.on("go-to-game-room", function(code,username){
@@ -76,7 +76,7 @@ $(function () {
         $("#chat").scrollTop($("#chat")[0].scrollHeight);
     })
 
-
+x
     https://www.w3schools.com/js/js_cookies.asp
 
     function setCookie(cname, cvalue, exdays) {
