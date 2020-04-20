@@ -17,15 +17,25 @@
     <div class="outer-container align-items-center justify-content-center">
         <div class="container justify-content-center container-game" >
             <div class = "row">
-                <h5 class="mr-auto ml-3">Player 1</h5>
-                <h5 class="ml-auto mr-auto">Current Turn</h5>
-                <h5 class="ml-auto mr-3">Player 2</h5>
+                <h5 class="game-text col pl-3">Player 1</h5>
+                <h5 id="current-turn" class="game-text col text-center">Current Turn</h5>
+                <h5 class="game-text col text-right pr-3">Player 2</h5>
             </div>
             <div class = "row">
-                <h3 id="player-1" class="mr-auto ml-3"></h3>
-                <h2 id="current-player" class="mr-auto ml-auto"></h2>
-                <h3 id="player-2" class="ml-auto mr-3"></h3>
+                <div class="col pl-3 d-flex">
+                    <h3 id="player-1" class="game-text my-auto pr-2"></h3>
+                    <div class="chip chip-red chip-small"></div>
+                </div>
+                <h2 id="current-player" class="game-text col text-center"></h2>
+                <div class="col text-right pr-3 d-flex ml-auto">
+                    <div class="chip chip-yellow chip-small ml-auto"></div>
+                    <h3 id="player-2" class="pl-2 game-text my-auto"></h3>
+                </div>
+
+
+
             </div>
+
             <div id="place-board" class=" mx-auto row">
 
                 <div id="place-col-0"class="col col-game col-place">
@@ -49,6 +59,11 @@
                     <div id="col-5" class="col col-game d-flex flex-column-reverse"></div>
                     <div id="col-6" class="col col-game d-flex flex-column-reverse"></div>
                 </div>
+            </div>
+            <div class="row justify-content-center mt-2">
+                <button id="switch" class="btn btn-primary mx-1" onclick="toggleTheme('theme-normal')">Normal</button>
+                <button id="switch" class="btn btn-dark mx-1" onclick="toggleTheme('theme-dark')">Dark</button>
+                <button id="switch" class="btn btn-funky mx-1" onclick="toggleTheme('theme-funky')">Funky</button>
             </div>
         </div>
     </div>

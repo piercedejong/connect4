@@ -6,8 +6,13 @@ $(function () {
         socket.emit('set-username', storage.username);
     });
 
+    socket.on('game-disconnect', function(){
+        window.location.href = "/"
+        alert("Game has disconnected")
+    })
+
     $("#game").ready(function(){
-        socket.emit("join-room")
+        socket.emit("join-room", storage.code)
     })
 
     $("#player-2").ready(function(){
@@ -25,12 +30,22 @@ $(function () {
         $("#player-2").html(name)
     })
 
-    socket.on("update-current-player", function(name){
+    socket.on("update-current-player", function(name, color){
         $("#current-player").html(name)
+        $("#place-chip").removeClass("chip-red chip-yellow").addClass(color)
     })
 
     socket.on("game-won", function(name){
-        alert(name+" has won the game!")
+        //alert(name+" has won the match!")
+        $("#current-turn").html("")
+        $("#current-player").html(name+" has won the match!")
+        $("#place-chip").hide()
+    })
+
+    socket.on("game-tie", function(){
+        $("#current-turn").html("")
+        $("#current-player").html("Tie Game!")
+        $("#place-chip").hide()
     })
 
     socket.on("invalid-chip", function(name){
@@ -68,3 +83,18 @@ $(function () {
         $("#"+id).append(chip)
     })
 })
+
+
+function setTheme(theme) {
+    window.localStorage.setItem('theme', theme);
+    document.documentElement.className = theme;
+}
+
+function toggleTheme(theme) {
+   setTheme(theme)
+}
+if(window.localStorage.getItem('theme') !== "theme-normal" || window.localStorage.getItem('theme') !== "theme-dark" || window.localStorage.getItem('theme') !== "theme-funky"){
+    setTheme('theme-normal')
+}else{
+    setTheme(window.localStorage.getItem('theme'))
+}
