@@ -19,8 +19,6 @@ app.use('/public/js', express.static(__dirname + '/public/js'));
 
 io.on('connection', function(socket){
 
-
-
     socket.on("set-username", function(name){
         socket.username = name
     })
@@ -135,15 +133,25 @@ io.on('connection', function(socket){
         g.won = false
         g.board = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]
 
-        if(waiting.username === g.player1 || waiting.username === g.player2){
-            waiting.username = ""
-            waiting.code = ""
+        if(g.player1 === g.player2){
+            io.to(g.room).emit("cant-join-own-room")
+            if(waiting.username === g.player1){
+                waiting.username = ""
+                waiting.code = ""
+            }
+        }else{
+            if(waiting.username === g.player1 || waiting.username === g.player2){
+                waiting.username = ""
+                waiting.code = ""
+            }
+
+            games.push(g)
+
+            io.to(g.room).emit('create-game-room')
+            io.to(g.room).emit("go-to-game-room", socket.code)
         }
 
-        games.push(g)
 
-        io.to(g.room).emit('create-game-room')
-        io.to(g.room).emit("go-to-game-room", socket.code)
     }
 
     // Delete any game the current user is alredy in

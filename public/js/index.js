@@ -23,7 +23,7 @@ $(function () {
     socket.on("cant-join-own-room",function(){
         alert("Error: Cannot join your own room")
         $("#gcode").val("")
-
+        location.reload();
     })
 
     $("#game-code-input").on("submit", function(event){
@@ -76,9 +76,9 @@ $(function () {
         $("#chat").scrollTop($("#chat")[0].scrollHeight);
     })
 
-x
-    https://www.w3schools.com/js/js_cookies.asp
 
+
+    https://www.w3schools.com/js/js_cookies.asp
     function setCookie(cname, cvalue, exdays) {
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
